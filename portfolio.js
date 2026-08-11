@@ -160,3 +160,168 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 });
+
+
+
+
+
+
+
+
+// handle form submittion data
+
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxafpNf1tUj3c_50qbVqpstgvjFafHBWxvFTWZXHAnATQ8adMNPVIqAqPxuJi3J7NsX/exec";
+
+
+const form = document.getElementById("contact-form");
+const submitBtn = document.getElementById("submit-btn");
+const sentMsg = document.getElementById("sent-msg");
+
+
+form.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending...";
+
+  sentMsg.hidden = true;
+
+
+  // Get form values.
+  const name =
+    document.getElementById("name").value.trim();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const message =
+    document.getElementById("message").value.trim();
+
+
+  // Basic frontend validation.
+  if (!name || !email || !message) {
+
+    showMessage(
+      "Please complete all fields.",
+      false
+    );
+
+    resetButton();
+    return;
+  }
+
+
+  const emailPattern =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+  if (!emailPattern.test(email)) {
+
+    showMessage(
+      "Please enter a valid email address.",
+      false
+    );
+
+    resetButton();
+    return;
+  }
+
+
+  const payload = {
+    name: name,
+    email: email,
+    message: message
+  };
+
+
+  try {
+
+    const response = await fetch(
+      GOOGLE_SCRIPT_URL,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+
+        body: JSON.stringify(payload)
+      }
+    );
+
+
+    const result = await response.json();
+
+
+    if (!result.success) {
+
+      throw new Error(
+        result.error ||
+        "Unable to send your message."
+      );
+
+    }
+
+
+    // Email has been sent successfully.
+    showMessage(
+      "Thanks! Your note has been sent. 💌",
+      true
+    );
+
+
+    form.reset();
+
+
+    /*
+      Open WhatsApp with the same submission.
+
+      This does NOT automatically send the message.
+      The visitor will see the WhatsApp conversation
+      with the message already typed and can press Send.
+    */
+    if (result.whatsappUrl) {
+
+      window.open(
+        result.whatsappUrl,
+        "_blank"
+      );
+
+    }
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    showMessage(
+      "Sorry, your message could not be sent. Please try again.",
+      false
+    );
+
+  }
+
+
+  resetButton();
+
+});
+
+
+function showMessage(message, success) {
+
+  sentMsg.textContent = message;
+
+  sentMsg.hidden = false;
+
+}
+
+
+function resetButton() {
+
+  submitBtn.disabled = false;
+
+  submitBtn.textContent = "Send Note";
+
+}
