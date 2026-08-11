@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link rel="stylesheet" href="header.css">
+
+    <style>
+        .error-page {
+            min-height: calc(100vh - clamp(32px, 6vw, 45px) - 90px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: clamp(30px, 6vw, 60px) 20px;
+        }
+
+        .error-page .error-code {
+            font-size: clamp(70px, 14vw, 140px);
+            font-weight: 700;
+            color: orangered;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .error-page h1 {
+            font-size: clamp(20px, 4vw, 30px);
+            color: #222;
+            margin-top: 10px;
+        }
+
+        .error-page p {
+            font-size: clamp(13px, 2.5vw, 16px);
+            color: #666;
+            margin-top: 12px;
+            max-width: 420px;
+        }
+
+        .error-page a.home-btn {
+            display: inline-block;
+            margin-top: 28px;
+            padding: 12px 32px;
+            background: orangered;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: .3s;
+        }
+
+        .error-page a.home-btn:hover {
+            background: #c9430f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= TOP HEADER ================= -->
+    <div class="top-header">
+
+        <div class="top-left">
+            <div class="icon-wrap">
+                <i class="fa-solid fa-envelope"></i>
+                <span class="ring-3"></span>
+            </div>
+            <div class="marquee-wrap">
+                <span>duckworthstudio.ai@gmail.com</span>
+            </div>
+        </div>
+
+        <div class="top-right">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-x-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+
+    </div>
+
+    <!-- ================= MAIN HEADER ================= -->
+    <header class="header">
+
+        <div class="logo">
+            <img src="https://picsum.photos/200/200?random=1" alt="Logo">
+        </div>
+
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="projects.html">Projects</a>
+            <a href="about.html">About</a>
+            <a href="blog.html">Blog</a>
+            <a href="news.html">News</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </header>
+
+    <!-- ================= 404 CONTENT ================= -->
+    <div class="error-page">
+        <div class="error-code">404</div>
+        <h1>Page not found</h1>
+        <p>The page you're looking for doesn't exist, may have been moved, or the link is broken.</p>
+        <a href="/" class="home-btn">Back to home</a>
+    </div>
+
+</body>
+
+</html>

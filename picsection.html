@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <link rel="stylesheet" href="picsection.css">
+</head>
+<body>
+    <section>
+        <div class="gallery-header">
+            <h4>Snapshots</h4>
+            <h2>Explore Our Collection</h2>
+            <p class="section-desc">Your tour round the class starts here — browse our collection of
+                photos captured across hiking trails, campsites, city tours, and wildlife encounters
+                from different events throughout the year.</p>
+
+            <div class="toolbar">
+                <div class="toolbar-left" id="toolbarLeft">
+                    <svg class="globe-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+                        <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="1.6"/>
+                        <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M5 6.5C7 8 9.5 9 12 9s5-1 7-2.5" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M5 17.5C7 16 9.5 15 12 15s5 1 7 2.5" stroke="currentColor" stroke-width="1.6"/>
+                    </svg>
+                    <span class="toolbar-title" id="toolbarTitle">Global</span>
+                    <button class="toolbar-arrow-btn" id="toolbarArrowBtn" aria-label="Show categories">
+                        <svg class="toolbar-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="category-dropdown" id="categoryDropdown"></div>
+                </div>
+                <button class="hamburger-btn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== FILTERED GRID ===== -->
+        <div class="filtered-grid" id="filteredGrid"></div>
+
+        <!-- ===== CONTENT – all cards ===== -->
+        <div class="content">
+
+            <!-- ===== FIRST ROW (always visible) ===== -->
+            <div class="card" data-title="Hiking">
+                <div class="image_container">
+                    <div class="content1">
+                        <img src="./images/1755953469419.jpg" alt="Hiking photo 1">
+                        <img src="./images/1741106650280.jpg" alt="Hiking photo 2">
+                    </div>
+                    <div class="content2">
+                        <img src="./images/1763843669603.jpg" alt="Hiking photo 3">
+                    </div>
+                </div>
+                <div class="description">
+                    <h3 class="card-title">Hiking</h3>
+                    <p class="photo-count"><span class="count-num">43</span> photos</p>
+                    <button class="view-btn">View more</button>
+                </div>
+            </div>
+
+            <div class="card" data-title="Camping">
+                <div class="image_container">
+                    <div class="content1">
+                        <img src="./images/1755953469419.jpg" alt="Camping photo 1">
+                        <img src="./images/1784879021336.jpg" alt="Camping photo 2">
+                    </div>
+                    <div class="content2">
+                        <img src="./images/1771046326899.jpg" alt="Camping photo 3">
+                    </div>
+                </div>
+                <div class="description">
+                    <h3 class="card-title">Camping</h3>
+                    <p class="photo-count"><span class="count-num">28</span> photos</p>
+                    <button class="view-btn">View more</button>
+                </div>
+            </div>
+
+            <div class="card" data-title="City Tour">
+                <div class="image_container">
+                    <div class="content1">
+                        <img src="./images/1741106650280.jpg" alt="City Tour photo 1">
+                        <img src="./images/1774967490290.jpg" alt="City Tour photo 2">
+                    </div>
+                    <div class="content2">
+                        <img src="./images/1782142311839.jpg" alt="City Tour photo 3">
+                    </div>
+                </div>
+                <div class="description">
+                    <h3 class="card-title">City Tour</h3>
+                    <p class="photo-count"><span class="count-num">35</span> photos</p>
+                    <button class="view-btn">View more</button>
+                </div>
+            </div>
+
+            <div class="card" data-title="Wildlife">
+                <div class="image_container">
+                    <div class="content1">
+                        <img src="./images/1768444789006.jpg" alt="Wildlife photo 1">
+                        <img src="./images/1783578538023.jpg" alt="Wildlife photo 2">
+                    </div>
+                    <div class="content2">
+                        <img src="./images/1769133202348.jpg" alt="Wildlife photo 3">
+                    </div>
+                </div>
+                <div class="description">
+                    <h3 class="card-title">Wildlife</h3>
+                    <p class="photo-count"><span class="count-num">19</span> photos</p>
+                    <button class="view-btn">View more</button>
+                </div>
+            </div>
+
+            <!-- ===== HIDDEN ROWS (second row) ===== -->
+            <div class="hidden-rows" id="hiddenRows">
+
+                <div class="card" data-title="Mountain">
+                    <div class="image_container">
+                        <div class="content1">
+                            <img src="./images/1755953469419.jpg" alt="Mountain photo 1">
+                            <img src="./images/1741106650280.jpg" alt="Mountain photo 2">
+                        </div>
+                        <div class="content2">
+                            <img src="./images/1763843669603.jpg" alt="Mountain photo 3">
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h3 class="card-title">Mountain</h3>
+                        <p class="photo-count"><span class="count-num">31</span> photos</p>
+                        <button class="view-btn">View more</button>
+                    </div>
+                </div>
+
+                <div class="card" data-title="Beach">
+                    <div class="image_container">
+                        <div class="content1">
+                            <img src="./images/1784879021336.jpg" alt="Beach photo 1">
+                            <img src="./images/1771046326899.jpg" alt="Beach photo 2">
+                        </div>
+                        <div class="content2">
+                            <img src="./images/1769133202348.jpg" alt="Beach photo 3">
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h3 class="card-title">Beach</h3>
+                        <p class="photo-count"><span class="count-num">26</span> photos</p>
+                        <button class="view-btn">View more</button>
+                    </div>
+                </div>
+
+                <div class="card" data-title="Ski">
+                    <div class="image_container">
+                        <div class="content1">
+                            <img src="./images/1768444789006.jpg" alt="Ski photo 1">
+                            <img src="./images/1783578538023.jpg" alt="Ski photo 2">
+                        </div>
+                        <div class="content2">
+                            <img src="./images/1782142311839.jpg" alt="Ski photo 3">
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h3 class="card-title">Ski</h3>
+                        <p class="photo-count"><span class="count-num">22</span> photos</p>
+                        <button class="view-btn">View more</button>
+                    </div>
+                </div>
+
+                <div class="card" data-title="Safari">
+                    <div class="image_container">
+                        <div class="content1">
+                            <img src="./images/1774967490290.jpg" alt="Safari photo 1">
+                            <img src="./images/1755953469419.jpg" alt="Safari photo 2">
+                        </div>
+                        <div class="content2">
+                            <img src="./images/1769133202348.jpg" alt="Safari photo 3">
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h3 class="card-title">Safari</h3>
+                        <p class="photo-count"><span class="count-num">18</span> photos</p>
+                        <button class="view-btn">View more</button>
+                    </div>
+                </div>
+
+            </div> <!-- end hidden-rows -->
+        </div> <!-- end content -->
+
+        <!-- ===== "MORE" BUTTON – outside .content, at the bottom ===== -->
+        <div class="more-wrapper">
+            <button class="more-btn" id="moreBtn">More</button>
+        </div>
+
+    </section>
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="gallery-overlay" id="galleryOverlay">
+        <div class="gallery-overlay-header">
+            <h2 id="galleryTitle"></h2>
+            <button class="gallery-close" id="galleryClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+
+    <script src="gallery.js"></script>
+</body>
+</html>
