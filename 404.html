@@ -2,114 +2,1415 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>404 - Page Not Found</title>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 
-    <link rel="stylesheet" href="header.css">
+    <!-- Google Fonts (cute & modern) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="portfolio.css">
 
     <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #faf7f2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ================= PRELOADER (adapted from the flowers loader) ================= */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background-color: #faf7f2;
+            background-image: radial-gradient(circle at 50% 40%, rgba(255, 69, 0, 0.10) 0%, transparent 60%);
+            overflow: hidden;
+            transition: opacity 0.7s ease;
+        }
+
+        #loader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #loader-glow {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 106, 61, 0.35) 0%, transparent 70%);
+            filter: blur(10px);
+            animation: loader-pulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes loader-pulse {
+            0%, 100% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        #loader-star {
+            position: relative;
+            font-size: 46px;
+            filter: drop-shadow(0 0 12px rgba(255, 106, 61, 0.65));
+            animation: loader-beat 1.1s ease-in-out infinite;
+        }
+
+        @keyframes loader-beat {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.18) rotate(-8deg); }
+            50% { transform: scale(0.95) rotate(0deg); }
+            75% { transform: scale(1.08) rotate(8deg); }
+        }
+
+        #loader-title {
+            position: relative;
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(32px, 7vw, 46px);
+            color: orangered;
+            text-shadow: 0 0 14px rgba(255, 154, 120, 0.55), 0 0 34px rgba(255, 77, 20, 0.25);
+            margin-top: 4px;
+        }
+
+        #loader-subtitle {
+            position: relative;
+            font-family: 'Quicksand', sans-serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: clamp(13px, 2.4vw, 16px);
+            letter-spacing: 0.1em;
+            color: #a15a3a;
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+
+        #loader-bar-track {
+            position: relative;
+            width: min(70vw, 260px);
+            height: 6px;
+            border-radius: 6px;
+            background-color: rgba(255, 69, 0, 0.10);
+            overflow: hidden;
+            box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.08);
+        }
+
+        #loader-bar-fill {
+            position: relative;
+            width: 0%;
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, orangered, #ffb38a, orangered);
+            background-size: 200% 100%;
+            animation: loader-shimmer 1.4s linear infinite;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255, 106, 61, 0.6);
+        }
+
+        @keyframes loader-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        #loader-percent {
+            position: relative;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.2em;
+            color: orangered;
+            opacity: 0.85;
+        }
+
+        /* ---------- TOP HEADER ---------- */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e1e1e;
+            color: #eee;
+            padding: 6px clamp(16px, 4vw, 40px);
+            font-size: clamp(12px, 1.2vw, 14px);
+            flex-wrap: wrap;
+            gap: 6px 16px;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            flex: 1 1 180px;
+        }
+
+        .icon-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: orangered;
+            font-size: 15px;
+        }
+
+        .ring-3 {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border: 1.5px solid rgba(255, 69, 0, 0.25);
+            border-radius: 50%;
+            animation: ringPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes ringPulse {
+            0%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        .marquee-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-wrap span {
+            display: inline-block;
+            animation: scrollText 12s linear infinite;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .top-right {
+            display: flex;
+            gap: 14px;
+        }
+
+        .top-right a {
+            color: #ccc;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .top-right a:hover {
+            color: orangered;
+            transform: scale(1.15);
+        }
+
+        /* ---------- MAIN HEADER ---------- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px clamp(16px, 4vw, 40px);
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .logo img {
+            width: clamp(40px, 6vw, 60px);
+            height: clamp(40px, 6vw, 60px);
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+        }
+
+        .logo img:hover {
+            transform: rotate(-6deg) scale(1.04);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(12px, 2vw, 28px);
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: clamp(14px, 1.1vw, 16px);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2.5px;
+            background: orangered;
+            border-radius: 4px;
+            transition: 0.35s;
+        }
+
+        .nav-links a:hover {
+            color: orangered;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ---------- 404 PAGE ---------- */
         .error-page {
-            min-height: calc(100vh - clamp(32px, 6vw, 45px) - 90px);
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: clamp(30px, 6vw, 60px) 20px;
+            padding: clamp(30px, 6vw, 70px) 20px;
+            min-height: calc(100vh - clamp(32px, 6vw, 45px) - 90px);
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 20% 50%, #fff5ed 0%, #faf0ea 40%, #f5e8e0 100%);
+        }
+
+        /* floating background shapes */
+        .error-page::before {
+            content: '✦ ✧ ✦ ✧ ✦';
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            font-size: clamp(20px, 3vw, 36px);
+            color: rgba(255, 69, 0, 0.08);
+            letter-spacing: 30px;
+            white-space: nowrap;
+            transform: rotate(-12deg);
+            pointer-events: none;
+        }
+
+        .error-page::after {
+            content: '✧ ✦ ✧ ✦ ✧';
+            position: absolute;
+            bottom: 12%;
+            right: 5%;
+            font-size: clamp(24px, 3.5vw, 42px);
+            color: rgba(255, 69, 0, 0.06);
+            letter-spacing: 28px;
+            white-space: nowrap;
+            transform: rotate(8deg);
+            pointer-events: none;
+        }
+
+        /* ---------- AMBIENT SPARKLE BUBBLES (adapted from the flowers "love-burst" hearts) ---------- */
+        .sparkle-bubbles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle-bubble {
+            position: absolute;
+            bottom: -10%;
+            font-size: var(--sb-size, 20px);
+            color: orangered;
+            opacity: 0;
+            animation: sparkle-rise var(--sb-dur, 7s) ease-in var(--sb-delay, 0s) infinite;
+            filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.25));
+        }
+
+        @keyframes sparkle-rise {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.6);
+                opacity: 0;
+            }
+            12% {
+                opacity: 0.55;
+            }
+            50% {
+                transform: translateY(-52vh) translateX(var(--sb-drift, 20px)) rotate(180deg) scale(1);
+                opacity: 0.4;
+            }
+            88% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(calc(var(--sb-drift, 20px) * 2)) rotate(360deg) scale(0.7);
+                opacity: 0;
+            }
+        }
+
+        /* cute 404 illustration */
+        .error-illustration {
+            position: relative;
+            margin-bottom: 6px;
+            z-index: 2;
+        }
+
+        .error-illustration .big-emoji {
+            font-size: clamp(80px, 18vw, 160px);
+            display: block;
+            animation: floatY 4s ease-in-out infinite;
+            filter: drop-shadow(0 8px 24px rgba(255, 69, 0, 0.15));
+            line-height: 1.2;
+        }
+
+        @keyframes floatY {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            50% {
+                transform: translateY(-16px) rotate(2deg);
+            }
+        }
+
+        .error-illustration .sparkle {
+            position: absolute;
+            font-size: clamp(20px, 3vw, 36px);
+            animation: sparkle 2.4s ease-in-out infinite;
+        }
+
+        .error-illustration .sparkle:nth-child(2) {
+            top: 0;
+            right: -10px;
+            animation-delay: 0.3s;
+        }
+
+        .error-illustration .sparkle:nth-child(3) {
+            bottom: 10px;
+            left: -16px;
+            animation-delay: 0.9s;
+            font-size: clamp(14px, 2vw, 24px);
+        }
+
+        @keyframes sparkle {
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(20deg);
+            }
         }
 
         .error-page .error-code {
-            font-size: clamp(70px, 14vw, 140px);
+            position: relative;
+            z-index: 2;
+            font-size: clamp(60px, 12vw, 120px);
             font-weight: 700;
             color: orangered;
             line-height: 1;
             letter-spacing: -2px;
+            text-shadow: 0 4px 20px rgba(255, 69, 0, 0.15);
+            margin-top: -8px;
         }
 
-        .error-page h1 {
-            font-size: clamp(20px, 4vw, 30px);
+        .error-page .sub-title {
+            position: relative;
+            z-index: 2;
+            font-size: clamp(20px, 4vw, 34px);
+            font-weight: 700;
             color: #222;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
-        .error-page p {
-            font-size: clamp(13px, 2.5vw, 16px);
-            color: #666;
+        .error-page .sub-title span {
+            background: linear-gradient(135deg, orangered, #ff7a4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-page .desc {
+            position: relative;
+            z-index: 2;
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: #777;
             margin-top: 12px;
-            max-width: 420px;
+            max-width: 460px;
+            line-height: 1.6;
+            padding: 0 10px;
         }
 
-        .error-page a.home-btn {
-            display: inline-block;
-            margin-top: 28px;
-            padding: 12px 32px;
-            background: orangered;
-            color: #fff;
+        /* ----- buttons ----- */
+        .btn-group {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn-group a,
+        .btn-group button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: clamp(14px, 1.2vw, 17px);
             text-decoration: none;
-            font-weight: 600;
-            border-radius: 30px;
-            transition: .3s;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            letter-spacing: 0.3px;
         }
 
-        .error-page a.home-btn:hover {
-            background: #c9430f;
+        .btn-back {
+            background: #fff;
+            color: #333;
+            border: 2px solid #e8e0d8;
+        }
+
+        .btn-back:hover {
+            background: #f5f0eb;
+            border-color: #ccc;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-back i {
+            color: orangered;
+            font-size: 16px;
+        }
+
+        .btn-game {
+            background: linear-gradient(135deg, orangered, #ff6a3d);
+            color: #fff;
+            border: 2px solid transparent;
+            box-shadow: 0 6px 24px rgba(255, 69, 0, 0.30);
+        }
+
+        .btn-game:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 36px rgba(255, 69, 0, 0.40);
+            background: linear-gradient(135deg, #e63e00, #ff5a2a);
+        }
+
+        .btn-game i {
+            font-size: 18px;
+        }
+
+        /* ---------- GAME OVERLAY ---------- */
+        .game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.50);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .game-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .game-container {
+            background: #fff;
+            border-radius: 40px;
+            max-width: 600px;
+            width: 100%;
+            padding: clamp(24px, 4vw, 40px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.30);
+            position: relative;
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .game-header h2 {
+            font-size: clamp(20px, 3vw, 26px);
+            color: #222;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-header h2 span {
+            font-size: clamp(26px, 3.5vw, 34px);
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 20px;
+            font-weight: 600;
+            font-size: clamp(14px, 1.5vw, 17px);
+            color: #444;
+        }
+
+        .game-stats .score {
+            color: orangered;
+            font-size: clamp(20px, 2.5vw, 28px);
+        }
+
+        .game-stats .timer {
+            color: #666;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .game-stats .timer.warning {
+            color: #e05030;
+            animation: pulse 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0.6;
+                transform: scale(0.94);
+            }
+        }
+
+        .game-arena {
+            position: relative;
+            width: 100%;
+            height: clamp(280px, 50vh, 400px);
+            background: linear-gradient(180deg, #fdf8f4 0%, #f5ede7 100%);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 2px dashed #e8ddd5;
+            margin: 6px 0 14px;
+            touch-action: none;
+            cursor: pointer;
+        }
+
+        .game-arena .floating-emoji {
+            position: absolute;
+            font-size: clamp(38px, 6vw, 56px);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: transform 0.15s ease, opacity 0.3s ease;
+            animation: floatEmoji 4s ease-in-out infinite alternate;
+            will-change: transform;
+            line-height: 1;
+            touch-action: none;
+        }
+
+        .game-arena .floating-emoji:hover {
+            transform: scale(1.3) !important;
+        }
+
+        .game-arena .floating-emoji.caught {
+            animation: pop 0.35s ease forwards !important;
+        }
+
+        @keyframes floatEmoji {
+            0% {
+                transform: translate(0, 0) rotate(-4deg);
+            }
+            100% {
+                transform: translate(12px, -16px) rotate(6deg);
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.6) rotate(30deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        .game-arena .hint-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(16px, 2.5vw, 22px);
+            color: #bbb;
+            font-weight: 600;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .game-arena .hint-text i {
+            font-size: clamp(30px, 4vw, 48px);
+            color: #ddd;
+        }
+
+        .game-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .game-footer .message {
+            font-size: clamp(13px, 1.2vw, 15px);
+            color: #888;
+            font-weight: 600;
+            min-height: 28px;
+        }
+
+        .game-footer .message.high-score {
+            color: #ff6a3d;
+        }
+
+        .btn-close-game {
+            background: #f0ebe6;
+            color: #555;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: clamp(13px, 1vw, 15px);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-close-game:hover {
+            background: #e5ddd6;
+            transform: scale(1.04);
+        }
+
+        .btn-restart-game {
+            background: transparent;
+            border: 2px solid #e0d7cf;
+            color: #555;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: clamp(13px, 1vw, 15px);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-restart-game:hover {
+            background: #f5f0eb;
+            border-color: #ccc;
+            transform: scale(1.04);
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 640px) {
+            .top-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 4px;
+                padding: 6px 12px;
+            }
+            .top-left {
+                justify-content: center;
+            }
+            .top-right {
+                justify-content: center;
+            }
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px 16px;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 10px 14px;
+            }
+            .game-container {
+                padding: 20px 16px;
+                border-radius: 28px;
+                max-height: 95vh;
+            }
+            .game-arena {
+                height: clamp(220px, 40vh, 300px);
+            }
+            .btn-group a,
+            .btn-group button {
+                padding: 12px 24px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+            .game-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .game-footer .message {
+                text-align: center;
+                min-height: 20px;
+            }
+            .game-footer .btn-close-game,
+            .game-footer .btn-restart-game {
+                justify-content: center;
+                width: 100%;
+            }
+            .game-stats {
+                gap: 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .error-page .error-code {
+                font-size: 50px;
+            }
+            .error-illustration .big-emoji {
+                font-size: 70px;
+            }
+            .game-arena .floating-emoji {
+                font-size: 32px;
+            }
+        }
+
+        /* respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            #loader-glow, #loader-star, #loader-bar-fill, .sparkle-bubble, .big-emoji, .sparkle {
+                animation: none !important;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <!-- ================= PRELOADER ================= -->
+    <div id="loader">
+        <div id="loader-glow"></div>
+        <div id="loader-star">🌟</div>
+        <p id="loader-title">almost there</p>
+        <p id="loader-subtitle">sprinkling stardust...</p>
+        <div id="loader-bar-track">
+            <div id="loader-bar-fill"></div>
+        </div>
+        <p id="loader-percent">0%</p>
+    </div>
+
     <!-- ================= TOP HEADER ================= -->
-    <div class="top-header">
+    <nav class="navbar" aria-label="Main navigation">
 
-        <div class="top-left">
-            <div class="icon-wrap">
-                <i class="fa-solid fa-envelope"></i>
-                <span class="ring-3"></span>
-            </div>
-            <div class="marquee-wrap">
-                <span>duckworthstudio.ai@gmail.com</span>
-            </div>
-        </div>
+    <div class="nav-inner">
 
-        <div class="top-right">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-x-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
+      <a href="#top" class="brand">
+        Tr. Mercy's
+        <span>Classroom</span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        id="nav-toggle"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-tabs"
+      >
+        ☰
+      </button>
+
+      <ul class="tabs" id="nav-tabs">
+
+        <!-- <li>
+          <a href="#top">Home</a>
+        </li> -->
+        <li>
+          <a href="index.html#top">Home</a>
+        </li>
+
+        <li>
+          <a href="index.html#resources">Resources</a>
+        </li>
+
+        <li>
+          <a href="index.html#project">Sprouts Project</a>
+        </li>
+
+        <li>
+          <a href="blog.html">Blog</a>
+        </li>
+
+        <li>
+          <a href="index.html#gallery">Gallery</a>
+        </li>
+
+        <li>
+          <a href="index.html#testimonials">Parents Say</a>
+        </li>
+
+        <li>
+          <a href="index.html#contact">Contact</a>
+        </li>
+
+      </ul>
 
     </div>
 
-    <!-- ================= MAIN HEADER ================= -->
-    <header class="header">
-
-        <div class="logo">
-            <img src="https://picsum.photos/200/200?random=1" alt="Logo">
-        </div>
-
-        <nav class="nav-links">
-            <a href="home.html">Home</a>
-            <a href="projects.html">Projects</a>
-            <a href="about.html">About</a>
-            <a href="blog.html">Blog</a>
-            <a href="news.html">News</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-
-    </header>
+  </nav>
 
     <!-- ================= 404 CONTENT ================= -->
-    <div class="error-page">
+    <div class="error-page" id="errorPage">
+
+        <!-- ambient rising sparkles, adapted from the flowers page's rising hearts -->
+        <div class="sparkle-bubbles" id="sparkleBubbles"></div>
+
+        <!-- cute illustration -->
+        <div class="error-illustration">
+            <span class="big-emoji">🦄</span>
+            <span class="sparkle">✨</span>
+            <span class="sparkle">🌈</span>
+        </div>
+
         <div class="error-code">404</div>
-        <h1>Page not found</h1>
-        <p>The page you're looking for doesn't exist, may have been moved, or the link is broken.</p>
-        <a href="/" class="home-btn">Back to home</a>
+        <div class="sub-title">
+            Oops! This page took a <span>vacation</span> 🌴
+        </div>
+        <p class="desc">
+            The page you're looking for doesn't exist, may have moved,
+            or is busy chasing rainbows.
+        </p>
+
+        <div class="btn-group">
+            <a href="/" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Take Me Back
+            </a>
+            <button class="btn-game" id="openGameBtn">
+                <i class="fas fa-gamepad"></i> Play a Game
+            </button>
+        </div>
     </div>
+
+    <!-- ================= GAME OVERLAY ================= -->
+    <div class="game-overlay" id="gameOverlay">
+        <div class="game-container">
+
+            <!-- header -->
+            <div class="game-header">
+                <h2>
+                    <span>🌟</span> Catch the Stars
+                </h2>
+                <div class="game-stats">
+                    <span>⭐ <span class="score" id="scoreDisplay">0</span></span>
+                    <span class="timer" id="timerDisplay">20</span>
+                </div>
+            </div>
+
+            <!-- arena -->
+            <div class="game-arena" id="gameArena">
+                <div class="hint-text" id="hintText">
+                    <i class="fas fa-hand-pointer"></i>
+                    Click the stars &amp; emojis!
+                </div>
+                <!-- emojis will be injected here -->
+            </div>
+
+            <!-- footer -->
+            <div class="game-footer">
+                <div class="message" id="gameMessage">✨ Catch as many as you can!</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-restart-game" id="restartGameBtn">
+                        <i class="fas fa-rotate-right"></i> Restart
+                    </button>
+                    <button class="btn-close-game" id="closeGameBtn">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= PRELOADER SCRIPT ================= -->
+    <script>
+        (function() {
+            'use strict';
+
+            const loader = document.getElementById('loader');
+            const bar = document.getElementById('loader-bar-fill');
+            const percentText = document.getElementById('loader-percent');
+            const subtitle = document.getElementById('loader-subtitle');
+
+            const duration = 1600; // a quick, playful load — not a real delay for the user
+
+            const messages = [
+                { at: 0, text: 'sprinkling stardust...' },
+                { at: 40, text: 'chasing a rainbow...' },
+                { at: 75, text: 'almost there...' }
+            ];
+
+            let start = null;
+            let shownIndex = 0;
+
+            function fillBar(timestamp) {
+                if (!start) start = timestamp;
+                const elapsed = timestamp - start;
+                const percent = Math.min((elapsed / duration) * 100, 100);
+
+                bar.style.width = percent + '%';
+                percentText.textContent = Math.floor(percent) + '%';
+
+                if (shownIndex < messages.length - 1 && percent >= messages[shownIndex + 1].at) {
+                    shownIndex++;
+                    subtitle.textContent = messages[shownIndex].text;
+                }
+
+                if (percent < 100) {
+                    requestAnimationFrame(fillBar);
+                } else {
+                    finishLoading();
+                }
+            }
+
+            function finishLoading() {
+                loader.classList.add('hide');
+                setTimeout(() => {
+                    if (loader.parentNode) loader.remove();
+                }, 800);
+            }
+
+            // if someone has reduced motion on, skip straight to done
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                finishLoading();
+            } else {
+                requestAnimationFrame(fillBar);
+            }
+        })();
+    </script>
+
+    <!-- ================= AMBIENT SPARKLE BUBBLES SCRIPT ================= -->
+    <script>
+        (function() {
+            'use strict';
+
+            const container = document.getElementById('sparkleBubbles');
+            if (!container) return;
+
+            const GLYPHS = ['✦', '✧', '⭐', '✨'];
+            const COUNT = 14;
+
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            for (let i = 0; i < COUNT; i++) {
+                const el = document.createElement('span');
+                el.className = 'sparkle-bubble';
+                el.textContent = GLYPHS[Math.floor(random(0, GLYPHS.length))];
+
+                const size = random(12, 30);
+                const left = random(2, 96);
+                const dur = random(6, 12);
+                const delay = random(0, 10);
+                const drift = random(-40, 40);
+
+                el.style.left = left + '%';
+                el.style.setProperty('--sb-size', size + 'px');
+                el.style.setProperty('--sb-dur', dur + 's');
+                el.style.setProperty('--sb-delay', delay + 's');
+                el.style.setProperty('--sb-drift', drift + 'px');
+
+                container.appendChild(el);
+            }
+        })();
+    </script>
+
+    <!-- ================= GAME SCRIPT ================= -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ----- DOM refs -----
+            const overlay = document.getElementById('gameOverlay');
+            const openBtn = document.getElementById('openGameBtn');
+            const closeBtn = document.getElementById('closeGameBtn');
+            const restartBtn = document.getElementById('restartGameBtn');
+            const arena = document.getElementById('gameArena');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const messageEl = document.getElementById('gameMessage');
+            const hintText = document.getElementById('hintText');
+
+            // ----- Game state -----
+            const EMOJIS = ['⭐', '🌟', '🌈', '🦄', '💖', '✨', '🎈', '🍭', '🐱', '🐶', '🐰', '🦊', '🐼', '🌸', '🎀'];
+            const GAME_DURATION = 20; // seconds
+            const MAX_EMOJIS = 12;
+            const SPAWN_INTERVAL = 600; // ms
+
+            let score = 0;
+            let timeLeft = GAME_DURATION;
+            let gameRunning = false;
+            let gameInterval = null;
+            let spawnTimer = null;
+            let countdownInterval = null;
+            let highScore = parseInt(localStorage.getItem('starCatchHighScore')) || 0;
+            let emojiElements = [];
+            let isGameOver = false;
+
+            // ----- Helper functions -----
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            function randomInt(min, max) {
+                return Math.floor(random(min, max + 1));
+            }
+
+            function getRandomEmoji() {
+                return EMOJIS[randomInt(0, EMOJIS.length - 1)];
+            }
+
+            // ----- Spawn an emoji -----
+            function spawnEmoji() {
+                if (!gameRunning || isGameOver) return;
+
+                const el = document.createElement('div');
+                el.className = 'floating-emoji';
+                el.textContent = getRandomEmoji();
+
+                const arenaRect = arena.getBoundingClientRect();
+                const size = clamp(38, 56, Math.min(arenaRect.width, arenaRect.height) * 0.13);
+                const emojiSize = clamp(38, 56, size);
+
+                const pad = 20;
+                const maxX = arena.clientWidth - pad - emojiSize * 0.6;
+                const maxY = arena.clientHeight - pad - emojiSize * 0.6;
+                const x = random(pad, Math.max(pad, maxX));
+                const y = random(pad, Math.max(pad, maxY));
+
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+                el.style.fontSize = emojiSize + 'px';
+                el.dataset.x = x;
+                el.dataset.y = y;
+
+                // random float direction
+                const dx = random(-8, 8);
+                const dy = random(-8, 8);
+                const dur = random(3, 5.5);
+                el.style.animation = `floatEmoji ${dur}s ease-in-out ${random(0, 0.5)}s infinite alternate`;
+                el.style.setProperty('--dx', dx + 'px');
+                el.style.setProperty('--dy', dy + 'px');
+
+                // click handler
+                el.addEventListener('click', function catchEmoji(e) {
+                    e.stopPropagation();
+                    if (!gameRunning || isGameOver) return;
+                    if (this.classList.contains('caught')) return;
+
+                    // score!
+                    score++;
+                    scoreDisplay.textContent = score;
+                    this.classList.add('caught');
+
+                    // update message
+                    messageEl.textContent = '🎉 Nice catch! +1';
+                    messageEl.className = 'message high-score';
+
+                    // remove after animation
+                    setTimeout(() => {
+                        if (this.parentNode) this.remove();
+                    }, 400);
+
+                    // remove from array
+                    const idx = emojiElements.indexOf(this);
+                    if (idx > -1) emojiElements.splice(idx, 1);
+                });
+
+                arena.appendChild(el);
+                emojiElements.push(el);
+
+                // auto-remove after 4.5s if not caught
+                setTimeout(() => {
+                    if (el.parentNode && !el.classList.contains('caught')) {
+                        el.style.opacity = '0.3';
+                        el.style.transform = 'scale(0.6)';
+                        setTimeout(() => {
+                            if (el.parentNode) {
+                                el.remove();
+                                const idx2 = emojiElements.indexOf(el);
+                                if (idx2 > -1) emojiElements.splice(idx2, 1);
+                            }
+                        }, 300);
+                    }
+                }, 4500);
+            }
+
+            function clamp(min, max, val) {
+                return Math.min(max, Math.max(min, val));
+            }
+
+            // ----- Start game -----
+            function startGame() {
+                // reset
+                score = 0;
+                timeLeft = GAME_DURATION;
+                isGameOver = false;
+                gameRunning = true;
+                scoreDisplay.textContent = '0';
+                timerDisplay.textContent = timeLeft;
+                timerDisplay.className = 'timer';
+                messageEl.textContent = '✨ Go go go!';
+                messageEl.className = 'message';
+                hintText.style.display = 'none';
+
+                // clear old emojis
+                emojiElements.forEach(el => el.remove());
+                emojiElements = [];
+
+                // clear old intervals
+                clearInterval(gameInterval);
+                clearInterval(spawnTimer);
+                clearInterval(countdownInterval);
+
+                // spawn initial batch
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => spawnEmoji(), i * 150);
+                }
+
+                // spawn timer
+                spawnTimer = setInterval(() => {
+                    if (gameRunning && !isGameOver && emojiElements.length < MAX_EMOJIS) {
+                        spawnEmoji();
+                    }
+                }, SPAWN_INTERVAL);
+
+                // countdown
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    timerDisplay.textContent = timeLeft;
+                    if (timeLeft <= 5) {
+                        timerDisplay.className = 'timer warning';
+                    }
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+
+                // extra safety: keep arena populated
+                gameInterval = setInterval(() => {
+                    if (gameRunning && !isGameOver && emojiElements.length < 4) {
+                        spawnEmoji();
+                    }
+                }, 800);
+            }
+
+            // ----- End game -----
+            function endGame() {
+                if (isGameOver) return;
+                isGameOver = true;
+                gameRunning = false;
+                clearInterval(gameInterval);
+                clearInterval(spawnTimer);
+                clearInterval(countdownInterval);
+
+                // remove remaining emojis with a nice fade
+                emojiElements.forEach(el => {
+                    el.style.opacity = '0.2';
+                    el.style.transform = 'scale(0.5)';
+                    setTimeout(() => {
+                        if (el.parentNode) el.remove();
+                    }, 400);
+                });
+                emojiElements = [];
+
+                // check high score
+                let isNewHigh = false;
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('starCatchHighScore', String(highScore));
+                    isNewHigh = true;
+                }
+
+                // show message
+                if (isNewHigh) {
+                    messageEl.textContent = `🏆 New High Score: ${score}! Amazing! 🎉`;
+                    messageEl.className = 'message high-score';
+                } else if (score >= 15) {
+                    messageEl.textContent = `🌟 Great job! You caught ${score} stars! 🌟`;
+                    messageEl.className = 'message high-score';
+                } else if (score >= 8) {
+                    messageEl.textContent = `✨ Not bad! ${score} stars caught. Try again! ✨`;
+                    messageEl.className = 'message';
+                } else {
+                    messageEl.textContent = `💫 ${score} stars. Keep practicing! 💫`;
+                    messageEl.className = 'message';
+                }
+
+                hintText.style.display = 'flex';
+                timerDisplay.textContent = '0';
+            }
+
+            // ----- Reset / restart -----
+            function resetAndRestart() {
+                clearInterval(gameInterval);
+                clearInterval(spawnTimer);
+                clearInterval(countdownInterval);
+                emojiElements.forEach(el => el.remove());
+                emojiElements = [];
+                isGameOver = false;
+                gameRunning = false;
+                timerDisplay.className = 'timer';
+                hintText.style.display = 'flex';
+                messageEl.textContent = '🔄 Ready? Go!';
+                messageEl.className = 'message';
+                scoreDisplay.textContent = '0';
+                timerDisplay.textContent = GAME_DURATION;
+                startGame();
+            }
+
+            // ----- Open / Close overlay -----
+            function openGame() {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                // small delay before starting so the overlay is visible
+                setTimeout(() => {
+                    resetAndRestart();
+                }, 300);
+            }
+
+            function closeGame() {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                clearInterval(gameInterval);
+                clearInterval(spawnTimer);
+                clearInterval(countdownInterval);
+                gameRunning = false;
+                isGameOver = true;
+                emojiElements.forEach(el => el.remove());
+                emojiElements = [];
+                // reset display
+                scoreDisplay.textContent = '0';
+                timerDisplay.textContent = GAME_DURATION;
+                timerDisplay.className = 'timer';
+                hintText.style.display = 'flex';
+                messageEl.textContent = '✨ Catch as many as you can!';
+                messageEl.className = 'message';
+            }
+
+            // ----- Event listeners -----
+            openBtn.addEventListener('click', openGame);
+            closeBtn.addEventListener('click', closeGame);
+            restartBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetAndRestart();
+            });
+
+            // close on backdrop click
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) closeGame();
+            });
+
+            // keyboard: Escape to close
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                    closeGame();
+                }
+            });
+
+            // ensure arena click doesn't interfere
+            arena.addEventListener('click', function(e) {
+                // if click is on arena background, do nothing special
+            });
+
+            console.log('🦄 404 Game Loaded — High Score:', highScore);
+        })();
+    </script>
 
 </body>
 
