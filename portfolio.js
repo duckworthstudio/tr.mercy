@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // -------------------------------------------------------
 
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxafpNf1tUj3c_50qbVqpstgvjFafHBWxvFTWZXHAnATQ8adMNPVIqAqPxuJi3J7NsX/exec";
+    'https://script.google.com/macros/s/AKfycbxafpNf1tUj3c_50qbVqpstgvjFafHBWxvFTWZXHAnATQ8adMNPVIqAqPxuJi3J7NsX/exec';
 
 
   // -------------------------------------------------------
@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var revealEls =
     document.querySelectorAll('.reveal');
 
-
   if (
     'IntersectionObserver' in window &&
     revealEls.length
@@ -97,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-
   } else {
 
     revealEls.forEach(function (el) {
@@ -116,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var navLinks =
     document.querySelectorAll('#nav-tabs a');
 
-
   var currentPath =
     window.location.pathname
       .split('/')
@@ -127,20 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var href =
       link.getAttribute('href');
-
-
-    if (
-      href === currentPath ||
-      (
-        currentPath === 'index.html' &&
-        href.startsWith('#')
-      )
-    ) {
-
-      // Section links use scroll spy.
-      // Page links use exact matching.
-
-    }
 
 
     if (
@@ -492,10 +475,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-  // -------------------------------------------------------
+  // =======================================================
   // CONTACT FORM
   // Google Apps Script → Email
-  // -------------------------------------------------------
+  // =======================================================
 
   var form =
     document.getElementById(
@@ -515,11 +498,54 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
 
+  var nameInput =
+    document.getElementById(
+      'name'
+    );
+
+
+  var emailInput =
+    document.getElementById(
+      'email'
+    );
+
+
+  var messageInput =
+    document.getElementById(
+      'message'
+    );
+
+
   if (
     form &&
     sentMsg &&
-    submitBtn
+    submitBtn &&
+    nameInput &&
+    emailInput &&
+    messageInput
   ) {
+
+
+    // -----------------------------------------------------
+    // Format name when the user leaves the name field
+    // -----------------------------------------------------
+
+    nameInput.addEventListener(
+      'blur',
+      function () {
+
+        nameInput.value =
+          formatFullName(
+            nameInput.value
+          );
+
+      }
+    );
+
+
+    // -----------------------------------------------------
+    // Submit form
+    // -----------------------------------------------------
 
     form.addEventListener(
       'submit',
@@ -529,87 +555,106 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         // Prevent double submissions.
-        submitBtn.disabled = true;
+        if (submitBtn.disabled) {
+          return;
+        }
 
-        submitBtn.textContent =
-          'Sending...';
 
-
+        // Hide previous status message.
         sentMsg.hidden = true;
 
 
-        // -----------------------------------------------
-        // Get form values
-        // -----------------------------------------------
+        // -------------------------------------------------
+        // Get and clean form values
+        // -------------------------------------------------
 
         var name =
-          document
-            .getElementById('name')
-            .value
-            .trim();
+          formatFullName(
+            nameInput.value
+          );
 
 
         var email =
-          document
-            .getElementById('email')
-            .value
-            .trim();
+          emailInput.value
+            .trim()
+            .toLowerCase();
 
 
         var message =
-          document
-            .getElementById('message')
-            .value
+          messageInput.value
             .trim();
 
 
-        // -----------------------------------------------
-        // Basic validation
-        // -----------------------------------------------
+        // -------------------------------------------------
+        // Validate name
+        //
+        // At least TWO names are required.
+        // Three or more names are allowed.
+        // -------------------------------------------------
 
-        if (
-          !name ||
-          !email ||
-          !message
-        ) {
+        var nameParts =
+          name
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+        if (nameParts.length < 2) {
 
           showMessage(
-            'Please complete all fields.'
+            'Please enter at least your first and last name.',
+            false
           );
 
-          resetButton();
+          nameInput.focus();
 
           return;
 
         }
 
 
-        // -----------------------------------------------
-        // Email validation
-        // -----------------------------------------------
+        // -------------------------------------------------
+        // Validate email
+        // -------------------------------------------------
 
         var emailPattern =
           /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
-        if (
-          !emailPattern.test(email)
-        ) {
+        if (!emailPattern.test(email)) {
 
           showMessage(
-            'Please enter a valid email address.'
+            'Please enter a valid email address.',
+            false
           );
 
-          resetButton();
+          emailInput.focus();
 
           return;
 
         }
 
 
-        // -----------------------------------------------
-        // Prepare data
-        // -----------------------------------------------
+        // -------------------------------------------------
+        // Validate message
+        // -------------------------------------------------
+
+        if (!message) {
+
+          showMessage(
+            'Please enter your message.',
+            false
+          );
+
+          messageInput.focus();
+
+          return;
+
+        }
+
+
+        // -------------------------------------------------
+        // Prepare clean payload
+        // -------------------------------------------------
 
         var payload = {
 
@@ -622,11 +667,21 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
 
-        // -----------------------------------------------
-        // Send to Google Apps Script
-        // -----------------------------------------------
+        // -------------------------------------------------
+        // Show sending state
+        // -------------------------------------------------
+
+        submitBtn.disabled = true;
+
+        submitBtn.textContent =
+          'Sending...';
+
 
         try {
+
+          // -----------------------------------------------
+          // Send to Google Apps Script
+          // -----------------------------------------------
 
           var response =
             await fetch(
@@ -651,13 +706,17 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
 
+          // -----------------------------------------------
+          // Read server response
+          // -----------------------------------------------
+
           var result =
             await response.json();
 
 
-          // ---------------------------------------------
-          // Check response
-          // ---------------------------------------------
+          // -----------------------------------------------
+          // Check server response
+          // -----------------------------------------------
 
           if (!result.success) {
 
@@ -669,15 +728,17 @@ document.addEventListener('DOMContentLoaded', function () {
           }
 
 
-          // ---------------------------------------------
-          // Success
-          // ---------------------------------------------
+          // -----------------------------------------------
+          // SUCCESS
+          // -----------------------------------------------
 
           showMessage(
-            'Thanks! Your note has been sent. 💌'
+            'Thanks! Your note has been sent successfully. 💌',
+            true
           );
 
 
+          // Reset only after successful submission.
           form.reset();
 
 
@@ -689,14 +750,27 @@ document.addEventListener('DOMContentLoaded', function () {
           );
 
 
+          // ---------------------------------------------
+          // ERROR
+          // ---------------------------------------------
+
           showMessage(
-            'Sorry, your message could not be sent. Please try again.'
+            'Sorry, your message could not be sent. Please try again.',
+            false
           );
 
+        } finally {
+
+          // ---------------------------------------------
+          // Restore button
+          // ---------------------------------------------
+
+          submitBtn.disabled = false;
+
+          submitBtn.textContent =
+            'Send Note';
+
         }
-
-
-        resetButton();
 
       }
     );
@@ -704,29 +778,72 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-  // -------------------------------------------------------
-  // Contact form helper functions
-  // -------------------------------------------------------
+  // =======================================================
+  // CONTACT FORM HELPER FUNCTIONS
+  // =======================================================
 
-  function showMessage(message) {
+  /**
+   * Clean and format a full name.
+   *
+   * Examples:
+   *
+   * "john doe"
+   * → "John Doe"
+   *
+   * "JOHN MICHAEL DOE"
+   * → "John Michael Doe"
+   *
+   * " john   doe "
+   * → "John Doe"
+   */
+  function formatFullName(value) {
+
+    return value
+      .trim()
+      .replace(/\s+/g, ' ')
+      .split(' ')
+      .map(function (part) {
+
+        if (!part) {
+          return '';
+        }
+
+        return (
+          part.charAt(0).toUpperCase() +
+          part.slice(1).toLowerCase()
+        );
+
+      })
+      .filter(Boolean)
+      .join(' ');
+
+  }
+
+
+  /**
+   * Display success or error message.
+   */
+  function showMessage(message, success) {
 
     sentMsg.textContent =
       message;
 
+
     sentMsg.hidden = false;
 
-  }
 
+    if (success) {
 
-  function resetButton() {
+      sentMsg.style.color =
+        'var(--pencil)';
 
-    submitBtn.disabled =
-      false;
+    } else {
 
-    submitBtn.textContent =
-      'Send Note';
+      sentMsg.style.color =
+        'var(--coral)';
+
+    }
 
   }
 
 });
-
